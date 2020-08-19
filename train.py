@@ -1,3 +1,8 @@
+# ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+# 训练函数
+# ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+# 1. 导入需要使用的包
 import torch as t
 import torch.nn as nn
 import torch.nn.functional as F
@@ -15,9 +20,10 @@ device = t.device("cuda") if t.cuda.is_available() else t.device("cpu")
 Cam_train = CamvidDataset([cfg.TRAIN_ROOT, cfg.TRAIN_LABEL], cfg.crop_size)
 Cam_val = CamvidDataset([cfg.VAL_ROOT, cfg.VAL_LABEL], cfg.crop_size)
 
-train_data = DataLoader(Cam_train, batch_size=cfg.BATCH_SIZE, shuffle=True, num_workers=1)
-val_data = DataLoader(Cam_val, batch_size=cfg.BATCH_SIZE, shuffle=True, num_workers=1)
+train_data = DataLoader(Cam_train, batch_size=cfg.BATCH_SIZE, shuffle=True, num_workers=4)
+val_data = DataLoader(Cam_val, batch_size=cfg.BATCH_SIZE, shuffle=True, num_workers=4)
 
+# 参数 12 表示数据集分类数
 fcn = FCN(12)
 fcn = fcn.to(device)
 criterion = nn.NLLLoss().to(device)
@@ -63,10 +69,12 @@ def train(model):
             train_miou += eval_metric["miou"]
             train_class_acc += eval_metric["class_accuracy"]
 
-            print(".........")
+            print('|batch[{}/{}]|batch_loss {:.8f}|'.format(i+1, len(train_data), loss.item()))
+            
+    t.save(net.state_dict(), 'xxx.pth')
 
 
-
+train(fcn)
 
 
 

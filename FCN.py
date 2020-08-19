@@ -1,3 +1,7 @@
+# ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+# 网络搭建函数
+# ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
 # encoding: utf-8
 """补充内容见model and loss.ipynb & 自定义双向线性插值滤子（卷积核）.ipynb"""
 
@@ -24,7 +28,7 @@ def bilinear_kernel(in_channels, out_channels, kernel_size):
     return torch.from_numpy(weight)
 
 
-pretrained_net = models.vgg16_bn(pretrained=False)
+pretrained_net = models.vgg16_bn(pretrained=True)
 
 
 class FCN(nn.Module):
